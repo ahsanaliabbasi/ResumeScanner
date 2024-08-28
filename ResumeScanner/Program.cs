@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using ResumeScanner.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +11,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+string appconnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<ResumeScannerDBContext>(options => options.UseSqlServer(appconnectionString));
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
@@ -15,6 +24,10 @@ var app = builder.Build();
 //    app.UseSwagger();
 //    app.UseSwaggerUI();
 //}
+
+app.Logger.Log(LogLevel.Debug, "Debug Message");
+app.Logger.Log(LogLevel.Warning, "Warning Message");
+app.Logger.Log(LogLevel.Critical, "Critical Message");
 
 
 app.UseSwagger();
