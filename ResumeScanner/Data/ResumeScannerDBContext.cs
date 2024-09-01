@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ResumeScanner.Models;
 
 namespace ResumeScanner.Data
 {
@@ -9,6 +10,11 @@ namespace ResumeScanner.Data
 
         }
 
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<UserProfile> UserProfile { get; set; }
+
+        public DbSet<Skills> Skills { get; set; }
 
     }
 }

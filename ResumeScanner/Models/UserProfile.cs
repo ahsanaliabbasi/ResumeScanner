@@ -1,9 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ResumeScanner.Models
 {
     public class UserProfile
     {
+
+
+        [Key]
+        [ForeignKey("UserId")]
+        public int userId { get; set; }
         [Required]
         public string jobTitle { get; set; }
 
@@ -23,5 +29,11 @@ namespace ResumeScanner.Models
         public int phdDegreeStatus { get; set; }
         [Required]
         public string address { get; set; }
+
+        public User UserId { get; set; }
+
+
+
+
     }
 }

@@ -4,6 +4,7 @@ namespace ResumeScanner.Models
 {
     public class User
     {
+        [Key]
         public int userId { get; set; }
 
         [Required]
@@ -15,7 +16,9 @@ namespace ResumeScanner.Models
         [Required]
         public string email { get; set; }
 
+        public List<Skills> Skills { get; set; }
 
+        public UserProfile userProfile { get; set; }
 
     }
 }

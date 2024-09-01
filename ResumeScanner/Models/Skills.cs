@@ -3,8 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ResumeScanner.Models
 {
-    public class UserSkills
+    public class Skills
     {
+        [Key]
         public int skillId { get; set; }
         [Required]
         public string skillName { get; set; }
@@ -13,6 +14,7 @@ namespace ResumeScanner.Models
         [Required]
         public string majorDomain { get; set; }
 
+        public List<User> Users { get; set; }
 
     }
 }
