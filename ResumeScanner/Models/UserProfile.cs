@@ -8,8 +8,8 @@ namespace ResumeScanner.Models
 
 
         [Key]
-        [ForeignKey("UserId")]
-        public int userId { get; set; }
+        [ForeignKey("Id")]
+        public string userId { get; set; }
         [Required]
         public string jobTitle { get; set; }
 
@@ -30,7 +30,7 @@ namespace ResumeScanner.Models
         [Required]
         public string address { get; set; }
 
-        public User UserId { get; set; }
+        public User Id { get; set; }
 
 
 

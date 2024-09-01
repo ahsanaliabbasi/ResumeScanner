@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ResumeScanner.Data;
+using ResumeScanner.Mapper;
+using ResumeScanner.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +16,16 @@ builder.Services.AddSwaggerGen();
 
 string appconnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+
+// Setting up DB Connection
 builder.Services.AddDbContext<ResumeScannerDBContext>(options => options.UseSqlServer(appconnectionString));
 
+// Setting up Identity DB
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<ResumeScannerDBContext>()
+        .AddDefaultTokenProviders(); ;
+
+builder.Services.AddAutoMapper(typeof(MapperProfile));
 var app = builder.Build();
 
 
@@ -36,7 +47,9 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 
