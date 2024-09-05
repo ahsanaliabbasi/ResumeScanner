@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ResumeScanner.Data;
 using ResumeScanner.DTOs;
 using ResumeScanner.Models;
+using ResumeScanner.Services;
 
 namespace ResumeScanner.Repositories
 {
@@ -15,18 +16,28 @@ namespace ResumeScanner.Repositories
         public readonly IMapper _mapper;
         public readonly SignInManager<User> _signInManager;
         public readonly UserManager<User> _userManager;
+        public readonly IServices _services;
 
 
-        public UserRepository(ResumeScannerDBContext context, IMapper mapper, SignInManager<User> signInManager, UserManager<User> userManager)
+        public UserRepository(ResumeScannerDBContext context, IMapper mapper, SignInManager<User> signInManager, UserManager<User> userManager, IServices services)
         {
             _context = context;
             _mapper = mapper;
             _signInManager = signInManager;
             _userManager = userManager;
+            _services = services;
         }
 
         public async Task<SignUpResponseDTO> UserSignUp(SignupDTO signup)
         {
+
+
+            var usernameCheck = await _context.Users.FirstOrDefaultAsync(u => u.UserName == signup.userName || u.Email==signup.email);
+            if (usernameCheck != null)
+            {
+               return null;
+            }
+
 
             var user= _mapper.Map<User>(signup);
 
@@ -80,6 +91,8 @@ namespace ResumeScanner.Repositories
 
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == loginModel.userName);
                 var loggedInUser = _mapper.Map<LoginResponseDTO>(user);
+                var token = _services.Generate_JWT_Token(user);
+                loggedInUser.token= token;
                 return loggedInUser;
             }
             return null;

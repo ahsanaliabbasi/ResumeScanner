@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace ResumeScanner.Controllers
 
         }
 
-
+        [Authorize]
         [HttpGet("GetAllUsers")]
         public async Task <ActionResult<List<SignUpResponseDTO>>> GetAllUsers()
         {
@@ -36,6 +37,10 @@ namespace ResumeScanner.Controllers
         public async Task<IActionResult> SignUp([FromBody]SignupDTO signup)
         {
             var userProfileCreated = await _userRepository.UserSignUp(signup);
+
+            if (userProfileCreated is null) {
+                return BadRequest(new { Message = "Username or Email already exists!" });
+            }
 
             return Ok(userProfileCreated);
         }

@@ -1,10 +1,15 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using ResumeScanner.Data;
 using ResumeScanner.Mapper;
 using ResumeScanner.Models;
 using ResumeScanner.Repositories;
+using ResumeScanner.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +30,22 @@ builder.Services.AddDbContext<ResumeScannerDBContext>(options => options.UseSqlS
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ResumeScannerDBContext>()
         .AddDefaultTokenProviders();
+
+
+// JWT Authentication
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"])),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
 
 
 builder.Services.Configure<IdentityOptions>(options =>
@@ -51,6 +72,14 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 // Here we define all the interfaces and their implementation
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IServices,AuthServices>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .Build();
+});
 
 var app = builder.Build();
 
