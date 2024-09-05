@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ResumeScanner.Models;
 
 namespace ResumeScanner.Data
 {
-    public class ResumeScannerDBContext : DbContext
+    public class ResumeScannerDBContext : IdentityDbContext<User>
     {
         public ResumeScannerDBContext(DbContextOptions<ResumeScannerDBContext> options) : base(options)
         {

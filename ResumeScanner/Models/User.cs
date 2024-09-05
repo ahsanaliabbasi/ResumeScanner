@@ -1,20 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace ResumeScanner.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        [Key]
-        public int userId { get; set; }
 
         [Required]
         public string firstName { get; set; }
         [Required]
         public string lastName { get; set; }
 
-        [EmailAddress(ErrorMessage ="Invalid Email Address!")]
-        [Required]
-        public string email { get; set; }
 
         public List<Skills> Skills { get; set; }
 

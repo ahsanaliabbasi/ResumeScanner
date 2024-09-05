@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResumeScanner.Data;
 
@@ -11,9 +12,11 @@ using ResumeScanner.Data;
 namespace ResumeScanner.Migrations
 {
     [DbContext(typeof(ResumeScannerDBContext))]
-    partial class ResumeScannerDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240901104302_AddingIdentityDBContext")]
+    partial class AddingIdentityDBContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
